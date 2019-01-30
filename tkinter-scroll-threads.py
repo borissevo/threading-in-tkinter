@@ -14,18 +14,22 @@ class TaskGenerator(threading.Thread):
   def run(self):
     while True:
       if self.force_quit:
+        # if quit is requested, delete worker
         del self.master.worker
       elif self.stop:
+        # if stop is requested, show Start button and hide Stop button, if that isn't already done
         if self.stopped is False:
           self.stopped = True
           self.master.start_button.pack(side=tk.BOTTOM, fill=tk.X)
           self.master.stop_button.pack_forget()
         continue
       else:
+        # force a pause of 1s in task generation
         time.sleep(1)
         self.add_task()
 
   def add_task(self, event=None):
+    # create label displaying current time
     new_task = self.create_label(str(datetime.datetime.now()))
     new_task.pack(side=tk.TOP, fill=tk.X)
   
